@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 interface Size {
   id: number;
@@ -18,6 +19,7 @@ export default function ProductActions({ slug, sizes }: Props) {
   const [selected, setSelected] = useState<string>("");
   const [addedToCart, setAddedToCart] = useState(false);
   const router = useRouter();
+  const { t } = useLanguage();
 
   function handleAddToCart() {
     setAddedToCart(true);
@@ -35,7 +37,7 @@ export default function ProductActions({ slug, sizes }: Props) {
       {sizes.length > 0 && (
         <div className="mb-8">
           <p className="text-[10px] tracking-widest uppercase text-[#999] mb-4">
-            Beden Seç
+            {t((s) => s.product.sizeLabel)}
           </p>
           <div className="flex flex-wrap gap-2">
             {sizes.map((s) => (
@@ -59,14 +61,14 @@ export default function ProductActions({ slug, sizes }: Props) {
         onClick={handleAddToCart}
         className="w-full bg-[#111] text-white text-[11px] tracking-widest uppercase py-4 hover:bg-[#333] transition-colors mb-4"
       >
-        {addedToCart ? "✓ Sepete Eklendi" : "Sepete Ekle"}
+        {addedToCart ? t((s) => s.product.addedToCart) : t((s) => s.product.addToCart)}
       </button>
 
       <button
         onClick={handleBuyNow}
         className="w-full border border-[#111] text-[#111] text-[11px] tracking-widest uppercase py-4 hover:bg-[#111] hover:text-white transition-colors"
       >
-        Hemen Al
+        {t((s) => s.product.buyNow)}
       </button>
     </div>
   );

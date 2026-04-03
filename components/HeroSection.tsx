@@ -3,17 +3,19 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
+import { useLanguage } from "@/context/LanguageContext";
+
 export default function HeroSection() {
   const [ready, setReady] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
-    const t = setTimeout(() => setReady(true), 3000);
-    return () => clearTimeout(t);
+    const timer = setTimeout(() => setReady(true), 3000);
+    return () => clearTimeout(timer);
   }, []);
 
   return (
     <section className="grid grid-cols-1 md:grid-cols-2 min-h-[92vh] overflow-hidden">
-      {/* Image — slides in from left */}
       <div
         className="relative bg-[#F0F0F0] overflow-hidden min-h-[65vh] md:min-h-auto"
         style={{
@@ -34,92 +36,48 @@ export default function HeroSection() {
           priority
           sizes="(max-width: 768px) 100vw, 50vw"
         />
-        {/* Subtle gradient overlay */}
         <div className="absolute inset-0 bg-gradient-to-r from-transparent to-white/5" />
       </div>
 
-      {/* Text panel — fades up */}
       <div className="flex flex-col justify-end px-10 md:px-16 py-16 md:py-28 bg-white relative overflow-hidden">
+        <div className="absolute top-0 left-0 w-px bg-[#E8E8E8]"
+          style={{ transition: "height 1.2s cubic-bezier(0.16,1,0.3,1) 0.4s", height: ready ? "100%" : "0%" }} />
 
-        {/* Decorative line — draws in */}
-        <div
-          className="absolute top-0 left-0 w-px bg-[#E8E8E8]"
-          style={{
-            transition: "height 1.2s cubic-bezier(0.16,1,0.3,1) 0.4s",
-            height: ready ? "100%" : "0%",
-          }}
-        />
-
-        <div
-          style={{
-            transition: "opacity 0.9s ease 0.5s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.5s",
-            opacity: ready ? 1 : 0,
-            transform: ready ? "translateY(0)" : "translateY(24px)",
-          }}
-        >
+        <div style={{ transition: "opacity 0.9s ease 0.5s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.5s", opacity: ready ? 1 : 0, transform: ready ? "translateY(0)" : "translateY(24px)" }}>
           <p className="text-[10px] tracking-[0.4em] uppercase text-[#999] mb-6">
-            Yeni Koleksiyon — 2026
+            {t((s) => s.hero.badge)}
           </p>
         </div>
 
-        <div
-          style={{
-            transition: "opacity 0.9s ease 0.65s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.65s",
-            opacity: ready ? 1 : 0,
-            transform: ready ? "translateY(0)" : "translateY(28px)",
-          }}
-        >
+        <div style={{ transition: "opacity 0.9s ease 0.65s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.65s", opacity: ready ? 1 : 0, transform: ready ? "translateY(0)" : "translateY(28px)" }}>
           <h1 className="text-5xl md:text-6xl font-light leading-[1.1] text-[#111] mb-8 tracking-tight">
-            Zarafet
+            {t((s) => s.hero.title1)}
             <br />
-            <span className="italic text-[#444]">Sadelikle</span>
+            <span className="italic text-[#444]">{t((s) => s.hero.title2)}</span>
             <br />
-            Buluşuyor
+            {t((s) => s.hero.title3)}
           </h1>
         </div>
 
-        <div
-          style={{
-            transition: "opacity 0.9s ease 0.8s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.8s",
-            opacity: ready ? 1 : 0,
-            transform: ready ? "translateY(0)" : "translateY(28px)",
-          }}
-        >
-          <p className="text-sm text-[#888] leading-relaxed max-w-xs mb-12">
-            Lüks erkek modası. Her dikiş bir özen,
-            <br />her kumaş bir seçim. Fatih / İstanbul.
+        <div style={{ transition: "opacity 0.9s ease 0.8s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.8s", opacity: ready ? 1 : 0, transform: ready ? "translateY(0)" : "translateY(28px)" }}>
+          <p className="text-sm text-[#888] leading-relaxed max-w-xs mb-12 whitespace-pre-line">
+            {t((s) => s.hero.desc)}
           </p>
         </div>
 
-        <div
-          style={{
-            transition: "opacity 0.9s ease 0.95s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.95s",
-            opacity: ready ? 1 : 0,
-            transform: ready ? "translateY(0)" : "translateY(28px)",
-          }}
-        >
+        <div style={{ transition: "opacity 0.9s ease 0.95s, transform 0.9s cubic-bezier(0.16,1,0.3,1) 0.95s", opacity: ready ? 1 : 0, transform: ready ? "translateY(0)" : "translateY(28px)" }}>
           <Link
             href="/shop"
-            className="group inline-flex items-center gap-4 self-start border border-[#111] text-[#111] text-[11px] tracking-[0.25em] uppercase px-8 py-4 hover:bg-[#111] hover:text-white transition-all duration-400 overflow-hidden relative"
+            className="group inline-flex items-center gap-4 self-start border border-[#111] text-[#111] text-[11px] tracking-[0.25em] uppercase px-8 py-4 hover:bg-[#111] hover:text-white transition-all duration-400"
           >
-            <span>Koleksiyonu Keşfet</span>
-            <span
-              className="inline-block transition-transform duration-300 group-hover:translate-x-1"
-            >
-              →
-            </span>
+            <span>{t((s) => s.hero.cta)}</span>
+            <span className="inline-block transition-transform duration-300 group-hover:translate-x-1">→</span>
           </Link>
         </div>
 
-        {/* Bottom decorative element */}
-        <div
-          className="absolute bottom-8 right-10 text-[9px] tracking-[0.35em] text-[#ccc] uppercase"
-          style={{
-            transition: "opacity 1s ease 1.2s",
-            opacity: ready ? 1 : 0,
-          }}
-        >
-          Est. İstanbul
+        <div className="absolute bottom-8 right-10 text-[9px] tracking-[0.35em] text-[#ccc] uppercase"
+          style={{ transition: "opacity 1s ease 1.2s", opacity: ready ? 1 : 0 }}>
+          {t((s) => s.hero.est)}
         </div>
       </div>
     </section>

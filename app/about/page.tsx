@@ -1,13 +1,18 @@
+"use client";
+
 import Footer from "@/components/Footer";
 import Link from "next/link";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function AboutPage() {
+  const { t } = useLanguage();
+
   return (
     <main className="pt-16">
       {/* Hero */}
       <div className="bg-[#111] py-32 px-6 text-center">
         <p className="text-[10px] tracking-widest uppercase text-[#666] mb-4">
-          Hakkımızda
+          {t((s) => s.about.label)}
         </p>
         <h1 className="text-4xl md:text-5xl font-light text-white max-w-xl mx-auto leading-snug">
           Max Cavalera®
@@ -17,7 +22,7 @@ export default function AboutPage() {
       {/* Story */}
       <section className="max-w-2xl mx-auto px-6 py-24">
         <p className="text-[10px] tracking-widest uppercase text-[#999] mb-8">
-          Hikayemiz
+          {t((s) => s.about.storyLabel)}
         </p>
         <div className="space-y-6 text-sm text-[#444] leading-loose">
           <p>
@@ -45,7 +50,7 @@ export default function AboutPage() {
       <section id="contact" className="max-w-[1400px] mx-auto px-6 py-20 grid grid-cols-1 md:grid-cols-3 gap-12">
         <div>
           <p className="text-[10px] tracking-widest uppercase text-[#999] mb-5">
-            İletişim
+            {t((s) => s.about.contactLabel)}
           </p>
           <div className="space-y-2 text-sm text-[#444]">
             <p>Kemalpaşa Mahallesi</p>
@@ -58,7 +63,7 @@ export default function AboutPage() {
 
         <div id="shipping">
           <p className="text-[10px] tracking-widest uppercase text-[#999] mb-5">
-            Teslimat & İade
+            {t((s) => s.about.shippingLabel)}
           </p>
           <div className="space-y-3 text-sm text-[#444] leading-relaxed">
             <p>Siparişler en fazla 4 iş günü içinde kargoya verilir.</p>
@@ -69,7 +74,7 @@ export default function AboutPage() {
 
         <div id="size">
           <p className="text-[10px] tracking-widest uppercase text-[#999] mb-5">
-            Beden Rehberi
+            {t((s) => s.about.sizeLabel)}
           </p>
           <div className="text-sm text-[#444] leading-relaxed space-y-2">
             <p>Bedenlerimiz US / EU karşılıklı olarak etiketlenmiştir.</p>
@@ -85,13 +90,13 @@ export default function AboutPage() {
       {/* CTA */}
       <section className="bg-[#F7F7F7] py-20 text-center px-6">
         <h2 className="text-2xl font-light text-[#111] mb-8">
-          Koleksiyonu Keşfetmeye Hazır mısınız?
+          {t((s) => s.about.ctaTitle)}
         </h2>
         <Link
           href="/shop"
           className="inline-block border border-[#111] text-[#111] text-[11px] tracking-widest uppercase px-10 py-4 hover:bg-[#111] hover:text-white transition-colors"
         >
-          Mağazaya Git
+          {t((s) => s.about.ctaBtn)}
         </Link>
       </section>
 

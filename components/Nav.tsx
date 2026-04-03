@@ -4,23 +4,26 @@ import Link from "next/link";
 import Image from "next/image";
 import { useState, useEffect } from "react";
 import { ShoppingBag, Search, Menu, X } from "lucide-react";
-
-const links = [
-  { label: "Koleksiyon", href: "/shop" },
-  { label: "Takımlar", href: "/shop?category=all-suits" },
-  { label: "Aksesuarlar", href: "/shop?category=accessory" },
-  { label: "Hakkımızda", href: "/about" },
-];
+import { useLanguage } from "@/context/LanguageContext";
+import LanguageToggle from "@/components/LanguageToggle";
 
 export default function Nav() {
   const [scrolled, setScrolled] = useState(false);
   const [open, setOpen] = useState(false);
+  const { t } = useLanguage();
 
   useEffect(() => {
     const onScroll = () => setScrolled(window.scrollY > 40);
     window.addEventListener("scroll", onScroll);
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
+
+  const links = [
+    { label: t((s) => s.nav.collection), href: "/shop" },
+    { label: t((s) => s.nav.suits), href: "/shop?category=all-suits" },
+    { label: t((s) => s.nav.accessories), href: "/shop?category=accessory" },
+    { label: t((s) => s.nav.about), href: "/about" },
+  ];
 
   return (
     <>
@@ -55,15 +58,14 @@ export default function Nav() {
             ))}
           </nav>
 
-          {/* Icons */}
-          <div className="flex items-center gap-5">
+          {/* Icons + Language Toggle */}
+          <div className="flex items-center gap-4">
+            <LanguageToggle />
+            <div className="w-px h-3.5 bg-[#E8E8E8]" />
             <button className="hidden md:block text-[#666666] hover:text-[#111111] transition-colors">
               <Search size={18} strokeWidth={1.5} />
             </button>
-            <Link
-              href="/shop"
-              className="text-[#666666] hover:text-[#111111] transition-colors"
-            >
+            <Link href="/shop" className="text-[#666666] hover:text-[#111111] transition-colors">
               <ShoppingBag size={18} strokeWidth={1.5} />
             </Link>
             <button
@@ -97,6 +99,9 @@ export default function Nav() {
               </Link>
             ))}
           </nav>
+          <div className="px-6 mt-8">
+            <LanguageToggle />
+          </div>
           <div className="mt-auto px-6 pb-10 text-xs text-[#999] tracking-wider">
             shop@maxcavalera.com.tr
           </div>
