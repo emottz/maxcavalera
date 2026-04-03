@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<svg id="katman_1" data-name="katman 1" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 1200">
+  <defs>
+    <style>
+      .cls-1 {
+        font-family: Century, Century;
+        font-size: 137.12px;
+        letter-spacing: -.01em;
+      }
+
+      .cls-2 {
+        fill: none;
+        stroke: #000;
+        stroke-miterlimit: 10;
+        stroke-width: 3.15px;
+      }
+
+      .cls-3 {
+        font-family: BaskervilleBT-Roman, 'Baskerville BT';
+        font-size: 39.3px;
+        letter-spacing: -.01em;
+      }
+    </style>
+  </defs>
+  <path d="M714.2,499.49l-.17,36.05c-.7,9.61-6.91,17.98-15.89,21.44-9.04,3.48-19.34,1.38-26.31-5.37l-65.78-43.57h-9.57l-65.78,43.57c-6.97,6.76-17.26,8.86-26.31,5.37-8.98-3.46-15.19-11.83-15.89-21.44l-.17-36.05.17-36.05c.7-9.61,6.91-17.98,15.89-21.44,9.04-3.48,19.34-1.38,26.31,5.39,21.91,14.35,43.83,28.7,65.74,43.05,3.2.17,6.41.34,9.61.51l65.78-43.56c6.97-6.77,17.26-8.87,26.31-5.39,8.98,3.46,15.19,11.83,15.89,21.44l.17,36.05Z"/>
+  <circle class="cls-2" cx="1028.7" cy="627.67" r="25.63"/>
+  <text class="cls-1" transform="translate(145.67 717.62)"><tspan x="0" y="0">Max Cavalera</tspan></text>
+  <text class="cls-3" transform="translate(1014.61 638.53)"><tspan x="0" y="0">R</tspan></text>
+</svg>

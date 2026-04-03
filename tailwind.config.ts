@@ -8,9 +8,18 @@ const config: Config = {
   ],
   theme: {
     extend: {
+      fontFamily: {
+        sans: ["var(--font-inter)", "sans-serif"],
+      },
       colors: {
-        background: "var(--background)",
-        foreground: "var(--foreground)",
+        primary: "#111111",
+        secondary: "#666666",
+        border: "#E8E8E8",
+        bg: "#FFFFFF",
+      },
+      letterSpacing: {
+        widest: "0.2em",
+        wider: "0.1em",
       },
     },
   },

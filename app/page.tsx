@@ -1,101 +1,145 @@
 import Image from "next/image";
+import Link from "next/link";
+import { getProducts, getCategories } from "@/lib/api";
+import ProductCard from "@/components/ProductCard";
+import Footer from "@/components/Footer";
+import HeroSection from "@/components/HeroSection";
+import PageTransition from "@/components/PageTransition";
 
-export default function Home() {
+const CATEGORY_LABELS: Record<string, string> = {
+  "all-suits": "Takımlar",
+  "tuxedo-luxury-suit": "Smokin",
+  "coat-overcoats": "Palto & Kaban",
+  "all-shoes": "Ayakkabı",
+  "all-shirt": "Gömlek",
+  accessory: "Aksesuar",
+};
+
+export default async function HomePage() {
+  const [products, categories] = await Promise.all([
+    getProducts({ per_page: 8, orderby: "date", order: "desc" }),
+    getCategories(),
+  ]);
+
+  const heroProduct = products[0];
+  const secondProduct = products[1];
+
   return (
-    <div className="grid grid-rows-[20px_1fr_20px] items-center justify-items-center min-h-screen p-8 pb-20 gap-16 sm:p-20 font-[family-name:var(--font-geist-sans)]">
-      <main className="flex flex-col gap-8 row-start-2 items-center sm:items-start">
-        <Image
-          className="dark:invert"
-          src="https://nextjs.org/icons/next.svg"
-          alt="Next.js logo"
-          width={180}
-          height={38}
-          priority
-        />
-        <ol className="list-inside list-decimal text-sm text-center sm:text-left font-[family-name:var(--font-geist-mono)]">
-          <li className="mb-2">
-            Get started by editing{" "}
-            <code className="bg-black/[.05] dark:bg-white/[.06] px-1 py-0.5 rounded font-semibold">
-              app/page.tsx
-            </code>
-            .
-          </li>
-          <li>Save and see your changes instantly.</li>
-        </ol>
+    <main className="pt-16">
+      {/* HERO */}
+      {heroProduct && <HeroSection product={heroProduct} />}
 
-        <div className="flex gap-4 items-center flex-col sm:flex-row">
-          <a
-            className="rounded-full border border-solid border-transparent transition-colors flex items-center justify-center bg-foreground text-background gap-2 hover:bg-[#383838] dark:hover:bg-[#ccc] text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className="dark:invert"
-              src="https://nextjs.org/icons/vercel.svg"
-              alt="Vercel logomark"
-              width={20}
-              height={20}
-            />
-            Deploy now
-          </a>
-          <a
-            className="rounded-full border border-solid border-black/[.08] dark:border-white/[.145] transition-colors flex items-center justify-center hover:bg-[#f2f2f2] dark:hover:bg-[#1a1a1a] hover:border-transparent text-sm sm:text-base h-10 sm:h-12 px-4 sm:px-5 sm:min-w-44"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Read our docs
-          </a>
+      <PageTransition>
+      {/* MARQUEE BAND */}
+      <div className="overflow-hidden border-y border-[#E8E8E8] py-4 bg-white">
+        <div
+          className="flex gap-16 whitespace-nowrap"
+          style={{ animation: "marquee 25s linear infinite" }}
+        >
+          {Array(6)
+            .fill(null)
+            .map((_, i) => (
+              <span
+                key={i}
+                className="text-[10px] tracking-widest uppercase text-[#bbb] shrink-0"
+              >
+                Max Cavalera® &nbsp;·&nbsp; Lüks Erkek Moda &nbsp;·&nbsp; Fatih / İstanbul &nbsp;·&nbsp; Sınırlı Üretim &nbsp;·&nbsp; El İşçiliği &nbsp;·&nbsp;
+              </span>
+            ))}
         </div>
-      </main>
-      <footer className="row-start-3 flex gap-6 flex-wrap items-center justify-center">
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/file.svg"
-            alt="File icon"
-            width={16}
-            height={16}
-          />
-          Learn
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/window.svg"
-            alt="Window icon"
-            width={16}
-            height={16}
-          />
-          Examples
-        </a>
-        <a
-          className="flex items-center gap-2 hover:underline hover:underline-offset-4"
-          href="https://nextjs.org?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          <Image
-            aria-hidden
-            src="https://nextjs.org/icons/globe.svg"
-            alt="Globe icon"
-            width={16}
-            height={16}
-          />
-          Go to nextjs.org →
-        </a>
-      </footer>
-    </div>
+      </div>
+
+      {/* KATEGORİLER */}
+      <section className="max-w-[1400px] mx-auto px-6 py-20">
+        <div className="flex items-end justify-between mb-10">
+          <h2 className="text-2xl font-light tracking-wide text-[#111]">Kategoriler</h2>
+          <Link href="/shop" className="text-[11px] tracking-widest uppercase text-[#999] hover:text-[#111] transition-colors">
+            Tümünü Gör →
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
+          {categories.map((cat) => (
+            <Link
+              key={cat.slug}
+              href={`/shop?category=${cat.slug}`}
+              className="group relative bg-[#F7F7F7] aspect-square overflow-hidden flex items-end p-4 hover:bg-[#EFEFEF] transition-colors"
+            >
+              {cat.image && (
+                <Image
+                  src={cat.image.src}
+                  alt={cat.name}
+                  fill
+                  className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
+                  sizes="(max-width: 640px) 50vw, 16vw"
+                />
+              )}
+              <div className="relative z-10">
+                <p className="text-[11px] font-medium tracking-widest uppercase text-[#111] bg-white/90 px-2 py-1">
+                  {CATEGORY_LABELS[cat.slug] ?? cat.name}
+                </p>
+                <p className="text-[10px] text-[#999] mt-1">{cat.count} ürün</p>
+              </div>
+            </Link>
+          ))}
+        </div>
+      </section>
+
+      {/* EDITORIAL SPLIT */}
+      {secondProduct && (
+        <section className="grid grid-cols-1 md:grid-cols-2">
+          <div className="bg-[#111] flex flex-col justify-center px-10 py-24 order-2 md:order-1">
+            <p className="text-[10px] tracking-widest uppercase text-[#666] mb-4">Öne Çıkan</p>
+            <h2 className="text-3xl font-light text-white leading-snug mb-6 max-w-xs">
+              {secondProduct.name}
+            </h2>
+            <Link
+              href={`/product/${secondProduct.slug}`}
+              className="self-start text-[11px] tracking-widest uppercase border border-white text-white px-6 py-3 hover:bg-white hover:text-[#111] transition-colors duration-300"
+            >
+              İncele
+            </Link>
+          </div>
+          <div className="relative bg-[#F2F2F2] min-h-[60vh] overflow-hidden order-1 md:order-2">
+            <Image
+              src="/featured.png"
+              alt="Royal Sapphire Gold Embroidered Tuxedo"
+              fill
+              className="object-cover object-[center_15%]"
+              sizes="(max-width: 768px) 100vw, 50vw"
+            />
+          </div>
+        </section>
+      )}
+
+      {/* YENİ ÜRÜNLER */}
+      <section className="max-w-[1400px] mx-auto px-6 py-20">
+        <div className="flex items-end justify-between mb-10">
+          <h2 className="text-2xl font-light tracking-wide text-[#111]">Yeni Gelenler</h2>
+          <Link href="/shop" className="text-[11px] tracking-widest uppercase text-[#999] hover:text-[#111] transition-colors">
+            Tümünü Gör →
+          </Link>
+        </div>
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-x-4 gap-y-10">
+          {products.slice(0, 8).map((p) => (
+            <ProductCard key={p.id} product={p} />
+          ))}
+        </div>
+      </section>
+
+      {/* BRAND STATEMENT */}
+      <section className="bg-[#F7F7F7] py-24 px-6 text-center">
+        <p className="text-[10px] tracking-widest uppercase text-[#999] mb-6">Max Cavalera® Hakkında</p>
+        <h2 className="text-3xl md:text-4xl font-light text-[#111] max-w-2xl mx-auto leading-relaxed">
+          &ldquo;Her takım, sizi en iyi versiyonunuza taşımak için tasarlandı.&rdquo;
+        </h2>
+        <div className="w-12 h-px bg-[#ccc] mx-auto mt-10 mb-10" />
+        <Link href="/about" className="text-[11px] tracking-widest uppercase text-[#111] hover:text-[#666] transition-colors">
+          Hikayemiz →
+        </Link>
+      </section>
+
+      <Footer />
+      </PageTransition>
+    </main>
   );
 }
