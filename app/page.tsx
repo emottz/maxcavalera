@@ -21,7 +21,6 @@ export default async function HomePage() {
     getCategories(),
   ]);
 
-  const heroProduct = products[0];
   const secondProduct = products[1];
 
   return (
