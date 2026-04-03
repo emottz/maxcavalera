@@ -48,6 +48,7 @@ export interface Category {
   name: string;
   slug: string;
   count: number;
+  parent: number;
   image: { src: string } | null;
 }
 
@@ -80,22 +81,23 @@ export async function getProduct(slug: string): Promise<Product | null> {
 }
 
 export async function getCategories(): Promise<Category[]> {
-  const res = await fetch(`${BASE}/products/categories?per_page=30`, {
+  const res = await fetch(`${BASE}/products/categories?per_page=50`, {
     headers: HEADERS,
     next: { revalidate: 86400 },
   });
   if (!res.ok) return [];
   const all: Category[] = await res.json();
-  // Only show main display categories
   const featured = [
     "all-suits",
-    "tuxedo-luxury-suit",
+    "luxury-suit",
     "coat-overcoats",
     "all-shoes",
     "all-shirt",
     "accessory",
   ];
-  return all.filter((c) => featured.includes(c.slug));
+  return featured
+    .map((slug) => all.find((c) => c.slug === slug))
+    .filter(Boolean) as Category[];
 }
 
 export function formatPrice(price: string, minorUnit: number): string {

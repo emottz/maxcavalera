@@ -6,13 +6,13 @@ import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import PageTransition from "@/components/PageTransition";
 
-const CATEGORY_LABELS: Record<string, string> = {
-  "all-suits": "Takımlar",
-  "tuxedo-luxury-suit": "Smokin",
-  "coat-overcoats": "Palto & Kaban",
-  "all-shoes": "Ayakkabı",
-  "all-shirt": "Gömlek",
-  accessory: "Aksesuar",
+const CATEGORY_META: Record<string, { label: string; sub: string }> = {
+  "all-suits":    { label: "Takımlar",     sub: "Klasik & Modern" },
+  "luxury-suit":  { label: "Lüks Süit",   sub: "Smokin & Özel" },
+  "coat-overcoats": { label: "Palto",      sub: "Kış Koleksiyonu" },
+  "all-shoes":    { label: "Ayakkabı",     sub: "İtalyan Kesim" },
+  "all-shirt":    { label: "Gömlek",       sub: "Klasik & Smokin" },
+  "accessory":    { label: "Aksesuar",     sub: "Papyon & Daha Fazlası" },
 };
 
 export default async function HomePage() {
@@ -20,6 +20,16 @@ export default async function HomePage() {
     getProducts({ per_page: 8, orderby: "date", order: "desc" }),
     getCategories(),
   ]);
+
+  // Fetch 1 representative product per category for its image
+  const catImages = await Promise.all(
+    categories.map(async (cat) => {
+      if (cat.image?.src) return { slug: cat.slug, src: cat.image.src };
+      const prods = await getProducts({ per_page: 1, category: cat.id, orderby: "popularity" });
+      return { slug: cat.slug, src: prods[0]?.images[0]?.src ?? null };
+    })
+  );
+  const catImageMap = Object.fromEntries(catImages.map((c) => [c.slug, c.src]));
 
   const secondProduct = products[1];
 
@@ -51,35 +61,53 @@ export default async function HomePage() {
       {/* KATEGORİLER */}
       <section className="max-w-[1400px] mx-auto px-6 py-20">
         <div className="flex items-end justify-between mb-10">
-          <h2 className="text-2xl font-light tracking-wide text-[#111]">Kategoriler</h2>
+          <div>
+            <p className="text-[10px] tracking-widest uppercase text-[#999] mb-2">Koleksiyon</p>
+            <h2 className="text-2xl font-light tracking-wide text-[#111]">Kategoriler</h2>
+          </div>
           <Link href="/shop" className="text-[11px] tracking-widest uppercase text-[#999] hover:text-[#111] transition-colors">
             Tümünü Gör →
           </Link>
         </div>
-        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3">
-          {categories.map((cat) => (
-            <Link
-              key={cat.slug}
-              href={`/shop?category=${cat.slug}`}
-              className="group relative bg-[#F7F7F7] aspect-square overflow-hidden flex items-end p-4 hover:bg-[#EFEFEF] transition-colors"
-            >
-              {cat.image && (
-                <Image
-                  src={cat.image.src}
-                  alt={cat.name}
-                  fill
-                  className="object-cover opacity-80 group-hover:opacity-100 group-hover:scale-105 transition-all duration-500"
-                  sizes="(max-width: 640px) 50vw, 16vw"
-                />
-              )}
-              <div className="relative z-10">
-                <p className="text-[11px] font-medium tracking-widest uppercase text-[#111] bg-white/90 px-2 py-1">
-                  {CATEGORY_LABELS[cat.slug] ?? cat.name}
-                </p>
-                <p className="text-[10px] text-[#999] mt-1">{cat.count} ürün</p>
-              </div>
-            </Link>
-          ))}
+
+        {/* Grid: first card is wider */}
+        <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-6 gap-3 auto-rows-[320px]">
+          {categories.map((cat) => {
+            const meta = CATEGORY_META[cat.slug];
+            const imgSrc = catImageMap[cat.slug];
+            return (
+              <Link
+                key={cat.slug}
+                href={`/shop?category=${cat.slug}`}
+                className="group relative overflow-hidden bg-[#F2F2F2] flex flex-col justify-end"
+              >
+                {imgSrc && (
+                  <Image
+                    src={imgSrc}
+                    alt={meta?.label ?? cat.name}
+                    fill
+                    className="object-cover object-top transition-transform duration-700 group-hover:scale-105"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 17vw"
+                  />
+                )}
+                {/* Dark gradient overlay */}
+                <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-black/10 to-transparent" />
+
+                {/* Text */}
+                <div className="relative z-10 p-5 translate-y-2 group-hover:translate-y-0 transition-transform duration-300">
+                  <p className="text-[10px] tracking-widest uppercase text-white/60 mb-1">
+                    {cat.count} ürün
+                  </p>
+                  <p className="text-sm font-light tracking-widest uppercase text-white leading-tight">
+                    {meta?.label ?? cat.name}
+                  </p>
+                  <p className="text-[10px] text-white/50 mt-1 tracking-wider opacity-0 group-hover:opacity-100 transition-opacity duration-300">
+                    {meta?.sub}
+                  </p>
+                </div>
+              </Link>
+            );
+          })}
         </div>
       </section>
 
