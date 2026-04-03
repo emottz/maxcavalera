@@ -3,9 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useState } from "react";
-import type { Product } from "@/lib/api";
-
-export default function HeroSection({ product }: { product: Product }) {
+export default function HeroSection() {
   const [ready, setReady] = useState(false);
 
   useEffect(() => {

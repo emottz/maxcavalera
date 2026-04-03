@@ -27,7 +27,7 @@ export default async function HomePage() {
   return (
     <main className="pt-16">
       {/* HERO */}
-      {heroProduct && <HeroSection product={heroProduct} />}
+      <HeroSection />
 
       <PageTransition>
       {/* MARQUEE BAND */}
